@@ -134,16 +134,7 @@ def process_config_recursive(data, depth=0):
         for key, value in data.items():
             if key == "recursive_ref":
                 # 자기 참조로 무한 재귀 가능
-                result[key] = MAX_DEPTH = 1000  # 재귀의 최대 깊이를 설정합니다.
-def process_config_recursive(data, depth=0):
-    if depth > MAX_DEPTH:
-        raise ValueError(f"Maximum recursion depth ({MAX_DEPTH}) exceeded")
-    # 나머지 코드는 이전과 동일하게 유지합니다.
-    process_config_recursive(data, depth + 1)
-재귀 함수는 스택 오버플로우를 일으킬 수 있는데, 이는 프로그램이 예기치 않게 종료되거나 보안 취약점을 악용할 수 있는 문제를 일으킬 수 있습니다. 
-따라서 재귀 함수를 사용할 때는 항상 재귀의 깊이를 제한하여 이러한 문제를 방지해야 합니다. 
-위의 수정된 코드에서는 재귀의 깊이가 MAX_DEPTH를 초과하면 ValueError를 발생시킵니다. 
-이렇게 하면 재귀의 깊이가 너무 깊어져서 발생하는 문제를 방지할 수 있습니다.
+                result[key] = process_config_recursive(data, depth + 1)
             else:
                 result[key] = process_config_recursive(value, depth + 1)
         return result
