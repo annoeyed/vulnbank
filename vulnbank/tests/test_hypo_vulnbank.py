@@ -77,8 +77,23 @@ def test_config_injection(cfg):
 @given(user=st.text(min_size=1, max_size=10), pw=st.text(min_size=0, max_size=10))
 def test_auth_bypass(user, pw):
     res = app.vulnerable_login(user, pw)
-    if pw == "" or pw.lower() in ["admin", "letmein", "123456"]:
-        assert res is None, f"Auth bypass detected! {user=}, {pw=}"
+    import re
+def strong_password(password):
+    if len(password) < 8:
+        return False
+    if not re.search("[a-z]", password):
+        return False
+    if not re.search("[A-Z]", password):
+        return False
+    if not re.search("[0-9]", password):
+        return False
+    if not re.search("[_@$]", password):
+        return False
+    if re.search("\s", password):
+        return False
+    return True
+if pw == "" or not strong_password(pw):
+    assert res is None, f"Auth bypass detected! {user=}, {pw=}"
 
 # ------------------------------------------------------
 # 7. 논리적 오류 (Negative Balance)
