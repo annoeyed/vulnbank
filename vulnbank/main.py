@@ -127,7 +127,18 @@ class VulnBankApp:
     def stress_test(self, test_type, param):
         """스트레스 테스트 - DoS 취약점들"""
         if test_type == "memory":
-            return memory_bomb(param)
+            import resource
+def safe_memory_bomb(param):
+    # Set maximum memory usage limit (in bytes)
+    max_memory_usage = 1000000
+    resource.setrlimit(resource.RLIMIT_AS, (max_memory_usage, max_memory_usage))
+    # Original memory_bomb function
+    return memory_bomb(param)
+return safe_memory_bomb(param)
+이 코드는 Python의 resource 모듈을 사용하여 프로세스의 메모리 사용량을 제한합니다. 이는 Uncontrolled Resource Consumption 취약점을 완화하는 데 도움이 됩니다. 
+이 방법은 프로세스가 설정된 메모리 제한을 초과하려고 하면 시스템이 자동으로 프로세스를 종료하여 메모리 소모를 방지합니다. 
+그러나 이 방법은 Unix 기반 시스템에서만 작동하며, Windows에서는 작동하지 않습니다. Windows에서는 프로세스의 메모리 사용량을 제한하는 다른 방법을 찾아야 합니다.
+또한, 이 방법은 메모리 사용량을 제한하는 것이므로, 프로그램이 필요로 하는 메모리 양을 정확히 알고 있어야 합니다. 그렇지 않으면 프로그램이 예상치 못한 방식으로 종료될 수 있습니다.
         elif test_type == "cpu":
             return cpu_bomb(param)
         elif test_type == "regex":
@@ -143,13 +154,7 @@ class VulnBankApp:
         return {
             'version': '1.0.0-vulnerable',
             'debug_mode': DEBUG,
-            if DEBUG is False:
-    'secret_key': SECRET_KEY
-else:
-    'secret_key': 'DEBUG_MODE'
-1. 민감한 정보는 디버그 모드에서 노출되지 않도록 했습니다. 디버그 모드에서는 'DEBUG_MODE'라는 임시 키를 사용하고, 실제 운영 환경에서만 실제 'SECRET_KEY'를 사용합니다.
-2. 이렇게 하면 실제 'SECRET_KEY'가 노출되는 것을 방지하면서도, 디버그 모드에서는 코드의 동작을 확인할 수 있습니다.
-3. 추가적으로, 'SECRET_KEY'는 환경 변수나 별도의 보안 파일에 저장하고, 코드에서는 이를 불러와 사용하는 것이 좋습니다. 이렇게 하면 코드가 유출되더라도 'SECRET_KEY'는 안전하게 보호될 수 있습니다.,
+            'secret_key': SECRET_KEY,
             'users': self.debug_info['users'],
             'database_path': self.db.db_path,
             'admin_mode': self.admin_mode,
