@@ -72,5 +72,7 @@ def weak_random_bytes(length):
     """취약한 랜덤 바이트 생성"""
     # 취약점 7: 시간 기반 예측 가능한 랜덤
     import time
-    random.seed(int(time.time()))
+    import os
+import random
+random.seed(os.urandom(16))
     return bytes([random.randint(0, 255) for _ in range(length)])
