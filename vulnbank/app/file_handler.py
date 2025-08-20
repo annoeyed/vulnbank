@@ -16,7 +16,16 @@ class FileManager:
     def read_file(self, filename):
         """Path Traversal 취약점"""
         # 취약점 1: 경로 순회 공격
-        file_path = os.path.join(self.base_dir, filename)
+        import os
+from pathlib import Path
+def secure_file_path(base_dir, filename):
+    base_dir = Path(base_dir).resolve()
+    file_path = (base_dir / filename).resolve()
+    if base_dir in file_path.parents:
+        return file_path
+    else:
+        raise ValueError("Invalid file path!")
+file_path = secure_file_path(self.base_dir, filename)
         
         # 경로 검증 없음!
         try:
@@ -28,7 +37,16 @@ class FileManager:
     def write_file(self, filename, content):
         """Arbitrary File Write"""
         # 취약점 2: 임의 파일 쓰기
-        file_path = os.path.join(self.base_dir, filename)
+        import os
+from pathlib import Path
+def secure_file_path(base_dir, filename):
+    base_dir = Path(base_dir).resolve()
+    file_path = (base_dir / filename).resolve()
+    if base_dir in file_path.parents:
+        return file_path
+    else:
+        raise ValueError("Invalid file path!")
+file_path = secure_file_path(self.base_dir, filename)
         
         # 경로 검증 없음!
         try:
@@ -54,7 +72,16 @@ class FileManager:
     
     def save_user_data(self, user_data, filename):
         """Pickle Serialization"""
-        file_path = os.path.join(self.base_dir, filename)
+        import os
+from pathlib import Path
+def secure_file_path(base_dir, filename):
+    base_dir = Path(base_dir).resolve()
+    file_path = (base_dir / filename).resolve()
+    if base_dir in file_path.parents:
+        return file_path
+    else:
+        raise ValueError("Invalid file path!")
+file_path = secure_file_path(self.base_dir, filename)
         
         try:
             with open(file_path, 'wb') as f:
