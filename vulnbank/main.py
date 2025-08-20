@@ -41,16 +41,7 @@ class VulnBankApp:
         print(f"[DEBUG] Login attempt: {username}:{password}")  # 패스워드 로깅!
         
         # SQL Injection 취약점
-        import psycopg2
-def authenticate(self, username, password):
-    conn = psycopg2.connect(database="testdb", user="postgres", password="passw0rd", host="127.0.0.1", port="5432")
-    cur = conn.cursor()
-    # Use parameterized query
-    cur.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
-    user = cur.fetchone()
-    conn.close()
-    return user
-user = self.auth.authenticate(username, password)
+        user = self.auth.authenticate(username, password)
         
         if user:
             # 세션 토큰 생성 (약한 암호화)
