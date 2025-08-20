@@ -1,0 +1,27 @@
+{
+  "static": {
+    "semgrep": {
+      "path": "analysis/vulnbank/semgrep_report.json",
+      "ok": true,
+      "findings": 0
+    },
+    "bandit": {
+      "path": "analysis/vulnbank/bandit_report.json",
+      "ok": true,
+      "findings": 0,
+      "severity": {
+        "HIGH": 0,
+        "MEDIUM": 0,
+        "LOW": 0
+      }
+    }
+  },
+  "dynamic": {
+    "pytest": {
+      "path": "analysis/vulnbank/vulnbank_pytest.json",
+      "ok": true,
+      "total": 0,
+      "collected": 0
+    }
+  }
+}

@@ -1,0 +1,5 @@
+Found Java version 17.0.15
+Available memory: 64005 MB
+Using JVM args: -Xmx16001m
+Unable to create home directory: /snap/zaproxy/45/analysis/vulnbank/.zap/
+Is the path correct and there's write permission?
