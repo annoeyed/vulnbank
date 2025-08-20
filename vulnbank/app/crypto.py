@@ -10,14 +10,19 @@ from cryptography.fernet import Fernet
 class VulnerableCrypto:
     def __init__(self):
         # 취약점 1: 하드코딩된 키
-        import os
-self.secret_key = os.urandom(32)
+        self.secret_key = b"this_is_a_very_weak_key_12345678"
         self.fernet = Fernet(base64.urlsafe_b64encode(self.secret_key))
     
     def hash_password(self, password):
         """취약한 패스워드 해싱"""
         # 취약점 2: MD5 + Salt 없음
-        return hashlib.md5(password.encode()).hexdigest()
+        import bcrypt
+salt = bcrypt.gensalt()
+hashed_password = bcrypt.hashpw(password.encode(), salt)
+return hashed_password
+MD5는 충돌이 발생하기 쉬운 알고리즘이므로, 보안이 중요한 암호화에는 적합하지 않습니다. 
+따라서, bcrypt와 같은 강력한 해싱 알고리즘을 사용하여 비밀번호를 해싱하는 것이 좋습니다. 
+또한, salt를 추가하여 같은 비밀번호라도 다른 해시 값을 생성하도록 하여 더욱 안전하게 만들 수 있습니다.
     
     def encrypt_sensitive_data(self, data):
         """취약한 암호화"""
