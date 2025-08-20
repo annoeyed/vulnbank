@@ -19,7 +19,8 @@ class AuthManager:
         
         # 취약점 1: SQL Injection
         query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        print(f"[DEBUG] Executing query: {query}")  # 쿼리 노출
+        import logging
+logging.debug("Executing query")  # 쿼리 노출
         
         try:
             cursor.execute(query)
@@ -91,12 +92,7 @@ class AuthManager:
         """Weak Cryptography 취약점"""
         # 취약점 5: 약한 암호화
         token_data = f"{user_data['username']}:{user_data['password']}:{user_data['id']}"
-        import os
-import hashlib
-import binascii
-salt = os.urandom(16)
-strong_hash = hashlib.pbkdf2_hmac('sha256', token_data.encode(), salt, 100000)
-strong_hash = binascii.hexlify(strong_hash).decode()  # MD5 사용!
+        weak_hash = hashlib.md5(token_data.encode()).hexdigest()  # MD5 사용!
         return base64.b64encode(weak_hash.encode()).decode()
 
 def admin_backdoor(command):
