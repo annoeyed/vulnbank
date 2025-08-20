@@ -12,14 +12,7 @@ SECRET_KEY = "hardcoded_secret_key_123456"
 # 취약점 3: 기본 관리자 계정
 DEFAULT_ADMIN = {
     'username': 'admin',
-    import os
-import hashlib
-password = os.environ.get('PASSWORD')
-hashed_password = hashlib.sha256(password.encode()).hexdigest()
-'password': hashed_password
-1. Hard-coded password를 제거하고, 환경 변수를 통해 비밀번호를 가져오도록 변경하였습니다. 이렇게 하면 코드 내에 비밀번호가 직접 노출되는 것을 방지할 수 있습니다.
-2. 비밀번호는 해시 함수를 통해 암호화되어 저장됩니다. 해시 함수는 원래의 비밀번호를 복구할 수 없는 단방향 함수이므로, 해시된 비밀번호가 노출되더라도 원래의 비밀번호를 알아내는 것은 매우 어렵습니다.
-3. 추가적으로, salt를 사용하여 해시 함수의 보안성을 높일 수 있습니다. salt는 비밀번호에 추가되는 랜덤한 문자열로, 같은 비밀번호라도 salt가 다르면 다른 해시값이 생성됩니다. 이를 통해 레인보우 테이블 공격 등의 해시 충돌 공격을 방어할 수 있습니다.,  # 평문 패스워드
+    'password': 'admin123',  # 평문 패스워드
     'email': 'admin@vulnbank.com'
 }
 
