@@ -35,7 +35,12 @@ class AuthManager:
         try:
             # 취약점 2: Unsafe Pickle Deserialization
             decoded = base64.b64decode(token)
-            user_data = pickle.loads(decoded)  # 매우 위험!
+            import json
+user_data = json.loads(decoded)
+pickle 모듈은 파이썬 객체를 직렬화하고 역직렬화하는데 사용되지만, 이는 신뢰할 수 없는 데이터에 대해 사용되어서는 안됩니다. 
+pickle.loads()는 임의의 파이썬 코드를 실행할 수 있기 때문에, 악의적인 사용자가 이를 이용하여 악성 코드를 주입할 수 있습니다. 
+따라서, 신뢰할 수 없는 데이터를 역직렬화할 때는 json.loads()와 같은 안전한 방법을 사용해야 합니다. 
+JSON은 텍스트 기반의 데이터 교환 형식으로, 파이썬의 기본 데이터 타입을 지원하며, pickle과 달리 임의의 코드 실행의 위험이 없습니다.  # 매우 위험!
             return user_data
         except Exception as e:
             print(f"Token error: {e}")
