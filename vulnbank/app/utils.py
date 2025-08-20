@@ -86,7 +86,9 @@ def memory_bomb(size_mb):
     # 취약점 5: 메모리 고갈 공격
     try:
         # 요청된 크기만큼 메모리 할당
-        bomb = b'A' * (size_mb * 1024 * 1024)
+        MAX_SIZE_MB = 100  # 최대 100MB로 제한
+size_mb = min(size_mb, MAX_SIZE_MB)
+bomb = b'A' * (size_mb * 1024 * 1024)
         return len(bomb)
     except MemoryError:
         return -1
