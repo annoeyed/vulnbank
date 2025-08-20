@@ -96,11 +96,7 @@ class VulnBankApp:
     def file_operations(self, operation, filename, content=""):
         """파일 작업 - 경로 순회 취약점"""
         if operation == "read":
-            import os
-def safe_read_file(self, filename):
-    # 입력값 검증 및 정제
-    filename = os.path.basename(filename)
-    return self.file_manager.read_file(filename)
+            return self.file_manager.read_file(filename)
         elif operation == "write":
             return self.file_manager.write_file(filename, content)
         elif operation == "upload":
@@ -147,7 +143,13 @@ def safe_read_file(self, filename):
         return {
             'version': '1.0.0-vulnerable',
             'debug_mode': DEBUG,
-            'secret_key': SECRET_KEY,
+            if DEBUG is False:
+    'secret_key': SECRET_KEY
+else:
+    'secret_key': 'DEBUG_MODE'
+1. 민감한 정보는 디버그 모드에서 노출되지 않도록 했습니다. 디버그 모드에서는 'DEBUG_MODE'라는 임시 키를 사용하고, 실제 운영 환경에서만 실제 'SECRET_KEY'를 사용합니다.
+2. 이렇게 하면 실제 'SECRET_KEY'가 노출되는 것을 방지하면서도, 디버그 모드에서는 코드의 동작을 확인할 수 있습니다.
+3. 추가적으로, 'SECRET_KEY'는 환경 변수나 별도의 보안 파일에 저장하고, 코드에서는 이를 불러와 사용하는 것이 좋습니다. 이렇게 하면 코드가 유출되더라도 'SECRET_KEY'는 안전하게 보호될 수 있습니다.,
             'users': self.debug_info['users'],
             'database_path': self.db.db_path,
             'admin_mode': self.admin_mode,
