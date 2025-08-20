@@ -37,9 +37,7 @@ class VulnerableCrypto:
     def generate_session_key(self):
         """취약한 키 생성"""
         # 취약점 4: 약한 난수 생성
-        import os
-import random
-random.seed(os.urandom(16))  # 고정된 시드!
+        random.seed(12345)  # 고정된 시드!
         key = ''.join(random.choices(string.ascii_letters, k=16))
         return key
     
