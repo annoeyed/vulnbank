@@ -17,14 +17,7 @@ def validate_email(email):
     evil_pattern = r'^(a+)+$'
     
     if 'a' * 30 in email:  # 악성 입력 감지 시
-        return bool(from validate_email_address import validate_email
-is_valid = validate_email(email)
-Regular Expression Denial of Service (ReDoS)는 복잡한 정규 표현식을 사용할 때 발생하는 보안 취약점입니다. 
-이 취약점은 공격자가 특정 입력을 제공하여 프로그램이 과도한 역추적(backtracking)을 수행하도록 만들 수 있습니다. 
-이로 인해 프로그램의 성능이 저하되거나, 최악의 경우 서비스 거부(DoS) 상태가 될 수 있습니다.
-이를 완화하기 위해, 복잡한 정규 표현식 대신 이메일 유효성 검사를 위해 설계된 라이브러리를 사용하는 것이 좋습니다. 
-예를 들어, 'validate_email_address' 라이브러리는 이메일 주소의 유효성을 검사하는데 사용할 수 있습니다. 
-이 라이브러리는 정규 표현식을 사용하지 않으므로 ReDoS 취약점에 노출되지 않습니다.)  # ReDoS 발생!
+        return bool(re.match(evil_pattern, email))  # ReDoS 발생!
     
     return bool(re.match(pattern, email))
 
