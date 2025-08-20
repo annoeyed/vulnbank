@@ -68,8 +68,7 @@ class FileManager:
         # 취약점 4: XXE 공격
         try:
             # External entity 처리 활성화 (위험!)
-            parser = ET.XMLParser(resolve_entities=False)
-XML External Entity (XXE) 공격은 악의적인 사용자가 XML 파서의 외부 엔티티 처리 기능을 악용하여 원격 서버에 접근하거나 로컬 파일 시스템에 접근하는 보안 취약점입니다. 이를 방지하기 위해, XML 파서에서 외부 엔티티 처리를 비활성화해야 합니다. Python의 xml.etree.ElementTree.XMLParser는 기본적으로 외부 엔티티를 처리합니다. 하지만 resolve_entities 인자를 False로 설정하면 외부 엔티티 처리를 비활성화할 수 있습니다. 이렇게 하면 XXE 공격을 방지할 수 있습니다.
+            parser = ET.XMLParser()
             root = ET.fromstring(xml_content, parser)
             
             config = {}
@@ -88,7 +87,21 @@ XML External Entity (XXE) 공격은 악의적인 사용자가 XML 파서의 외�
         
         try:
             with open(upload_path, 'wb') as f:
-                f.write(file_content)
+                import os
+import imghdr
+def write_file(file_content, filename):
+    # 파일 확장자 검증
+    extension = os.path.splitext(filename)[1]
+    allowed_extensions = ['.jpg', '.png', '.gif', '.bmp']
+    if extension not in allowed_extensions:
+        raise ValueError('Invalid file type. Allowed types are .jpg, .png, .gif, .bmp')
+    # 파일 내용을 바이트로 변환하고 이미지 파일인지 검증
+    file_bytes = bytes(file_content, 'utf-8')
+    file_type = imghdr.what(None, file_bytes)
+    if file_type is None:
+        raise ValueError('Invalid file content. The file is not an image.')
+    with open(filename, 'wb') as f:
+        f.write(file_bytes)
             
             # 취약점 6: 업로드된 파일 자동 실행
             if filename.endswith('.py'):
