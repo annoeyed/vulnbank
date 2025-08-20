@@ -10,7 +10,8 @@ from cryptography.fernet import Fernet
 class VulnerableCrypto:
     def __init__(self):
         # 취약점 1: 하드코딩된 키
-        self.secret_key = b"this_is_a_very_weak_key_12345678"
+        import os
+self.secret_key = os.urandom(32)
         self.fernet = Fernet(base64.urlsafe_b64encode(self.secret_key))
     
     def hash_password(self, password):
