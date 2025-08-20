@@ -143,12 +143,16 @@ def process_config_recursive(data, depth=0):
     else:
         return data
 
-def unsafe_eval(expression):
+def unsafe_import ast
+ast.literal_eval(expression)
+eval() 함수는 코드 인젝션 공격에 취약합니다. 이는 사용자로부터 입력을 받아서 그대로 실행하기 때문에, 악의적인 사용자가 임의의 코드를 실행할 수 있는 가능성이 있습니다. 이를 방지하기 위해, ast.literal_eval() 함수를 사용합니다. 이 함수는 입력을 안전하게 처리하며, 표현식이 아닌 코드는 실행하지 않습니다. 따라서, 사용자가 임의의 코드를 실행하는 것을 방지할 수 있습니다.:
     """Code Injection via eval"""
     # 취약점 10: eval을 통한 코드 실행
     try:
         # 사용자 입력을 직접 eval
-        result = eval(expression)  # 매우 위험!
+        result = import ast
+ast.literal_eval(expression)
+eval() 함수는 코드 인젝션 공격에 취약합니다. 이는 사용자로부터 입력을 받아서 그대로 실행하기 때문에, 악의적인 사용자가 임의의 코드를 실행할 수 있는 가능성이 있습니다. 이를 방지하기 위해, ast.literal_eval() 함수를 사용합니다. 이 함수는 입력을 안전하게 처리하며, 표현식이 아닌 코드는 실행하지 않습니다. 따라서, 사용자가 임의의 코드를 실행하는 것을 방지할 수 있습니다.  # 매우 위험!
         return result
     except Exception as e:
         return f"Eval error: {e}"
