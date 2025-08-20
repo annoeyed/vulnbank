@@ -4,7 +4,8 @@
 import os
 
 # 취약점 1: 디버그 모드 활성화
-DEBUG = True
+import os
+DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 't']
 
 # 취약점 2: 하드코딩된 시크릿
 SECRET_KEY = "hardcoded_secret_key_123456"
