@@ -50,13 +50,7 @@ class VulnBankApp:
             # 디버그 정보에 사용자 추가
             self.debug_info['users'].append({
                 'username': username,
-                import hashlib
-hashed_password = hashlib.sha256(password.encode()).hexdigest()
-'password': hashed_password
-1. 원래의 코드는 사용자의 비밀번호를 평문으로 저장하고 있었습니다. 이는 보안 위협을 초래할 수 있습니다. 만약 데이터베이스가 해킹당하면, 사용자의 비밀번호가 그대로 노출될 수 있습니다.
-2. 수정된 코드에서는 hashlib 라이브러리를 사용하여 비밀번호를 해시화합니다. 해시 함수는 원래의 데이터를 알 수 없도록 변환시키는 일방향 함수입니다. 따라서 해시화된 비밀번호를 알아내더라도 원래의 비밀번호를 알아내기는 매우 어렵습니다.
-3. 추가적으로, 비밀번호를 해시화할 때는 솔트(salt)를 추가하는 것이 좋습니다. 솔트는 해시화 과정에 추가되는 랜덤한 데이터로, 같은 비밀번호라도 솔트 값에 따라 해시값이 달라집니다. 이를 통해 레인보우 테이블 공격 등의 해킹 기법을 방어할 수 있습니다.
-4. 그러나 이 방법도 완벽한 보안을 보장하지는 않습니다. 보안은 계속해서 업데이트되고 개선되어야 하는 것이기 때문에, 최신의 보안 트렌드와 기법을 항상 확인하고 적용하는 것이 중요합니다.,  # 평문 저장!
+                'password': password,  # 평문 저장!
                 'token': token,
                 'login_time': time.time()
             })
@@ -102,7 +96,11 @@ hashed_password = hashlib.sha256(password.encode()).hexdigest()
     def file_operations(self, operation, filename, content=""):
         """파일 작업 - 경로 순회 취약점"""
         if operation == "read":
-            return self.file_manager.read_file(filename)
+            import os
+def safe_read_file(self, filename):
+    # 입력값 검증 및 정제
+    filename = os.path.basename(filename)
+    return self.file_manager.read_file(filename)
         elif operation == "write":
             return self.file_manager.write_file(filename, content)
         elif operation == "upload":
