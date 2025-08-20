@@ -7,7 +7,8 @@ import os
 DEBUG = True
 
 # 취약점 2: 하드코딩된 시크릿
-SECRET_KEY = "hardcoded_secret_key_123456"
+import os
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # 취약점 3: 기본 관리자 계정
 DEFAULT_ADMIN = {
