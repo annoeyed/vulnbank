@@ -20,10 +20,7 @@ class Database:
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY,
                 username TEXT,
-                from werkzeug.security import generate_password_hash
-password_hash = generate_password_hash(password)
-패스워드를 평문으로 저장하는 대신, Werkzeug 라이브러리의 'generate_password_hash' 함수를 사용하여 패스워드를 해시화합니다. 이렇게 하면 실제 패스워드 값이 아닌 해시 값만 저장되므로, 데이터베이스가 노출되더라도 실제 패스워드는 안전하게 보호됩니다.
-추가로, 패스워드를 검증할 때는 'check_password_hash' 함수를 사용하여 입력받은 패스워드의 해시 값과 저장된 해시 값을 비교해야 합니다. 이렇게 하면 패스워드를 안전하게 검증할 수 있습니다.
+                password TEXT,  -- 평문 패스워드!
                 email TEXT,
                 balance REAL DEFAULT 1000.0,
                 is_admin INTEGER DEFAULT 0,
