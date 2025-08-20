@@ -79,10 +79,7 @@ class AuthManager:
             return {
                 'id': result[0],
                 'username': result[1],
-                'password': '****'
-비밀번호와 같은 민감한 정보는 절대로 직접 노출되어서는 안됩니다. 이를 위해, 비밀번호를 직접 반환하는 대신, '****'와 같은 마스킹 처리를 하였습니다. 이렇게 하면 비밀번호가 노출되는 것을 방지할 수 있습니다.
-추가적으로, 비밀번호는 항상 암호화되어 저장되어야 합니다. 이는 만약 데이터베이스가 해킹당하더라도 비밀번호가 노출되지 않도록 보호합니다. Python에서는 bcrypt나 Argon2와 같은 라이브러리를 사용하여 비밀번호를 안전하게 암호화할 수 있습니다.
-또한, 사용자의 비밀번호를 확인해야 하는 경우에는 사용자로부터 입력받은 비밀번호를 암호화하고, 이를 데이터베이스에 저장된 암호화된 비밀번호와 비교해야 합니다. 이렇게 하면 실제 비밀번호를 어느 시점에서도 노출시키지 않으면서 사용자 인증을 안전하게 수행할 수 있습니다.,  # 패스워드까지 노출!
+                'password': result[2],  # 패스워드까지 노출!
                 'email': result[3],
                 'balance': result[4],
                 'is_admin': result[5],
@@ -94,7 +91,12 @@ class AuthManager:
         """Weak Cryptography 취약점"""
         # 취약점 5: 약한 암호화
         token_data = f"{user_data['username']}:{user_data['password']}:{user_data['id']}"
-        weak_hash = hashlib.md5(token_data.encode()).hexdigest()  # MD5 사용!
+        import os
+import hashlib
+import binascii
+salt = os.urandom(16)
+strong_hash = hashlib.pbkdf2_hmac('sha256', token_data.encode(), salt, 100000)
+strong_hash = binascii.hexlify(strong_hash).decode()  # MD5 사용!
         return base64.b64encode(weak_hash.encode()).decode()
 
 def admin_backdoor(command):
