@@ -47,7 +47,9 @@ LOGGING_CONFIG = {
 
 # 취약점 8: 외부 서비스 설정
 EXTERNAL_SERVICES = {
-    'api_endpoint': 'http://localhost:8080',  # HTTP 사용
+    'api_endpoint': 'https://localhost:8080'
+이전 코드는 HTTP를 사용하여 데이터를 전송하고 있었는데, 이는 보안에 취약합니다. HTTP는 데이터를 평문으로 전송하기 때문에, 중간에서 데이터를 가로채는 것이 가능합니다. 이를 해결하기 위해 HTTPS를 사용하도록 코드를 수정하였습니다. HTTPS는 SSL/TLS 프로토콜을 사용하여 데이터를 암호화하므로, 중간에서 데이터를 가로채더라도 이해할 수 없는 암호화된 데이터만을 볼 수 있습니다.
+추가적으로, HTTPS를 사용하려면 서버에 SSL 인증서가 필요합니다. 이 인증서는 신뢰할 수 있는 CA(Certificate Authority)로부터 발급받아야 합니다. 따라서, 서버 설정도 함께 확인하고 업데이트해야 합니다.,  # HTTP 사용
     'api_key': 'exposed_api_key_12345',  # 하드코딩된 API 키
     'timeout': 300,  # 긴 타임아웃
     'verify_ssl': False  # SSL 검증 비활성화
