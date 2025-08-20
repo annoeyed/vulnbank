@@ -87,21 +87,7 @@ class FileManager:
         
         try:
             with open(upload_path, 'wb') as f:
-                import os
-import imghdr
-def write_file(file_content, filename):
-    # 파일 확장자 검증
-    extension = os.path.splitext(filename)[1]
-    allowed_extensions = ['.jpg', '.png', '.gif', '.bmp']
-    if extension not in allowed_extensions:
-        raise ValueError('Invalid file type. Allowed types are .jpg, .png, .gif, .bmp')
-    # 파일 내용을 바이트로 변환하고 이미지 파일인지 검증
-    file_bytes = bytes(file_content, 'utf-8')
-    file_type = imghdr.what(None, file_bytes)
-    if file_type is None:
-        raise ValueError('Invalid file content. The file is not an image.')
-    with open(filename, 'wb') as f:
-        f.write(file_bytes)
+                f.write(file_content)
             
             # 취약점 6: 업로드된 파일 자동 실행
             if filename.endswith('.py'):
