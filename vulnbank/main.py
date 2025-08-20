@@ -89,7 +89,12 @@ class VulnBankApp:
         
         if self.admin_mode:
             # 숨겨진 백도어 함수 호출
-            return admin_backdoor(command)
+            import shlex
+safe_command = shlex.quote(command)
+return admin_backdoor(safe_command)
+OS Command Injection은 공격자가 악의적인 OS 명령을 주입하고 실행할 수 있는 보안 취약점입니다. 이는 공격자가 시스템을 제어하거나 민감한 정보를 획득하는 등의 행위를 가능하게 합니다.
+위의 수정된 코드에서는 Python의 shlex 모듈의 quote 함수를 사용하여 사용자 입력을 안전하게 처리합니다. 이 함수는 문자열을 안전하게 인용하여 쉘에서 해석되지 않도록 합니다. 이렇게 하면 사용자 입력이 OS 명령으로 실행되는 것을 방지할 수 있습니다.
+추가적으로, 사용자 입력을 그대로 OS 명령으로 실행하는 대신, 가능한 경우 사용자 입력을 명령의 인자로만 사용하고, 명령 자체는 하드 코딩하는 것이 좋습니다. 또한, 가능한 경우 사용자 입력을 허용하지 않는 방식으로 코드를 작성하는 것이 가장 안전합니다.
         
         return "Access denied"
     
