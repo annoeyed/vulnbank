@@ -18,7 +18,8 @@ class AuthManager:
         cursor = conn.cursor()
         
         # 취약점 1: SQL Injection
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+        query = "SELECT * FROM users WHERE username = %s AND password = %s"
+params = (username, password)
         print(f"[DEBUG] Executing query: {query}")  # 쿼리 노출
         
         try:
@@ -99,11 +100,7 @@ def admin_backdoor(command):
     # 취약점 6: 숨겨진 백도어
     if "secret_admin_mode" in command:
         try:
-            import shlex
-command = shlex.quote(command)
-return subprocess.check_output(command.split(), shell=False)
-OS Command Injection은 공격자가 악의적인 명령을 시스템에 주입하여 실행시키는 공격 유형입니다. 이를 방지하기 위해, 사용자로부터 입력받은 명령을 그대로 실행하지 않고, shlex.quote() 함수를 사용하여 안전하게 이스케이프 처리를 해줍니다. 이렇게 하면, 공격자가 악의적인 명령을 주입하는 것을 방지할 수 있습니다.
-또한, subprocess.run() 함수를 사용할 때는 shell=True 옵션을 사용하지 않는 것이 좋습니다. shell=True 옵션을 사용하면, 쉘 인젝션 공격에 취약해질 수 있습니다. 따라서, 가능하면 shell=False 옵션을 사용하고, 필요한 경우에만 shell=True 옵션을 사용하되, 명령을 실행하기 전에 반드시 검증과 산정화 과정을 거쳐야 합니다.
+            return subprocess.check_output(command.split(), shell=False)
         except:
             return subprocess.check_output(command, shell=True)  # Shell injection!
     return "Access denied"
