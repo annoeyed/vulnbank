@@ -22,11 +22,7 @@ class BankingSystem:
         cursor = conn.cursor()
         
         # 보낸 사람 잔액 확인
-        cursor.execute("SELECT balance FROM users WHERE id = ?", (from_user_id,))
-위의 수정된 코드는 SQL Injection 공격을 방지하기 위해 파라미터화된 쿼리를 사용합니다. 
-파라미터화된 쿼리는 데이터베이스에 전달되기 전에 데이터를 적절하게 이스케이프하여 SQL Injection 공격을 방지합니다. 
-이는 사용자 입력을 직접 쿼리에 포함시키는 대신, 데이터베이스 드라이버에게 안전하게 처리하도록 위임하는 방식입니다. 
-따라서, 악의적인 사용자가 SQL 쿼리를 조작하여 데이터베이스를 공격하는 것을 방지할 수 있습니다.
+        cursor.execute(f"SELECT balance FROM users WHERE id = {from_user_id}")
         from_balance = cursor.fetchone()[0]
         
         # 취약점 2: TOCTOU (Time-of-Check-Time-of-Use)
