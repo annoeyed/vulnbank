@@ -35,12 +35,7 @@ class AuthManager:
         try:
             # 취약점 2: Unsafe Pickle Deserialization
             decoded = base64.b64decode(token)
-            import json
-user_data = json.loads(decoded)
-pickle 모듈은 파이썬 객체를 직렬화하고 역직렬화하는데 사용되지만, 이는 신뢰할 수 없는 데이터에 대해 사용되어서는 안됩니다. 
-pickle.loads()는 임의의 파이썬 코드를 실행할 수 있기 때문에, 악의적인 사용자가 이를 이용하여 악성 코드를 주입할 수 있습니다. 
-따라서, 신뢰할 수 없는 데이터를 역직렬화할 때는 json.loads()와 같은 안전한 방법을 사용해야 합니다. 
-JSON은 텍스트 기반의 데이터 교환 형식으로, 파이썬의 기본 데이터 타입을 지원하며, pickle과 달리 임의의 코드 실행의 위험이 없습니다.  # 매우 위험!
+            user_data = pickle.loads(decoded)  # 매우 위험!
             return user_data
         except Exception as e:
             print(f"Token error: {e}")
@@ -51,7 +46,12 @@ JSON은 텍스트 기반의 데이터 교환 형식으로, 파이썬의 기본 �
         # 취약점 3: Command Injection
         cmd = f"echo 'Changing password for {username}' | tee /tmp/password_change.log"
         try:
-            subprocess.run(cmd, shell=True, check=True)  # 위험한 shell 실행
+            import shlex
+safe_cmd = shlex.split(cmd)
+subprocess.run(safe_cmd, check=True)
+1. shell=True를 사용하면, 외부에서 입력된 명령어를 그대로 실행하게 되어 OS Command Injection 공격에 취약해집니다. 이를 방지하기 위해 shell=True 옵션을 제거하였습니다.
+2. shlex.split() 함수를 사용하여 사용자로부터 입력받은 명령어를 안전하게 파싱하였습니다. 이 함수는 문자열을 쉘 명령어로 안전하게 분리해주며, 이를 통해 명령어 주입 공격을 방지할 수 있습니다.
+3. 사용자로부터 입력받은 데이터는 항상 검증하고 정제하는 것이 좋습니다. 가능하다면, 사용자 입력을 허용하는 대신 미리 정의된 명령어 세트를 사용하는 것이 더 안전합니다.  # 위험한 shell 실행
         except Exception as e:
             pass
         
