@@ -67,7 +67,13 @@ class BankAccount:
     
     def add_transaction(self, amount, description=""):
         """취약점: 트랜잭션 검증 없음"""
-        self.balance += amount  # 음수도 가능!
+        if amount >= 0:
+    self.balance += amount
+else:
+    raise ValueError("Transaction amount must be positive")
+이전 코드는 음수의 거래 금액을 허용하여 잠재적으로 부정적인 잔액을 생성할 수 있었습니다. 이는 공격자가 이를 악용하여 시스템의 자원을 과도하게 소비하거나, 잘못된 잔액 정보를 생성하는 등의 문제를 일으킬 수 있습니다. 
+수정된 코드에서는 거래 금액이 0 이상인지 확인하고, 그렇지 않은 경우 ValueError를 발생시킵니다. 이렇게 하면 거래 금액이 음수인 경우를 방지하고, 시스템의 자원을 보호할 수 있습니다. 
+추가적으로, 이런 유효성 검사는 사용자 입력이나 외부 시스템에서 받은 데이터를 처리하기 전에 항상 수행되어야 합니다. 이는 입력 데이터의 신뢰성을 보장하고, 잠재적인 보안 위협을 방지하는 데 중요합니다.
         self.transactions.append({
             'amount': amount,
             'description': description,

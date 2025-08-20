@@ -155,7 +155,13 @@ def test_resource_exhaustion(fname):
     """
     try:
         res = app.file_operations(fname, "write")
-        assert len(fname) < 80 or res is None, f"Resource exhaustion via filename length! {len(fname)}"
+        if len(fname) >= 80:
+    raise ValueError(f"Filename too long! {len(fname)}")
+if res is None:
+    raise ValueError("Resource is None!")
+1. 파일 이름의 길이를 제한하여 리소스 고갈을 방지합니다. 파일 이름이 80자를 초과하면 ValueError를 발생시킵니다.
+2. 'res'가 None인 경우에도 ValueError를 발생시킵니다. 이는 잠재적으로 None 값을 처리하는 데 문제가 발생할 수 있기 때문입니다.
+3. assert 대신 if 문을 사용하여 예외 처리를 합니다. assert는 디버깅에 주로 사용되며, 프로덕션 코드에서는 예외 처리를 사용하는 것이 좋습니다.
     except Exception:
         pass
 

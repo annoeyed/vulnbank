@@ -19,7 +19,8 @@ class AuthManager:
         
         # 취약점 1: SQL Injection
         query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        print(f"[DEBUG] Executing query: {query}")  # 쿼리 노출
+        import logging
+logging.debug("Executing query")  # 쿼리 노출
         
         try:
             cursor.execute(query)

@@ -7,7 +7,8 @@ __version__ = "1.0.0"
 __author__ = "Security Research Team"
 
 # 취약한 설정들
-DEBUG = True
+import os
+DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 't']
 SECRET_KEY = "123456"  # 하드코딩된 시크릿
 DATABASE_URL = "sqlite:///vulnbank.db"
 

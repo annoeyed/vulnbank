@@ -127,7 +127,18 @@ class VulnBankApp:
     def stress_test(self, test_type, param):
         """스트레스 테스트 - DoS 취약점들"""
         if test_type == "memory":
-            return memory_bomb(param)
+            import resource
+def safe_memory_bomb(param):
+    # Set maximum memory usage limit (in bytes)
+    max_memory_usage = 1000000
+    resource.setrlimit(resource.RLIMIT_AS, (max_memory_usage, max_memory_usage))
+    # Original memory_bomb function
+    return memory_bomb(param)
+return safe_memory_bomb(param)
+이 코드는 Python의 resource 모듈을 사용하여 프로세스의 메모리 사용량을 제한합니다. 이는 Uncontrolled Resource Consumption 취약점을 완화하는 데 도움이 됩니다. 
+이 방법은 프로세스가 설정된 메모리 제한을 초과하려고 하면 시스템이 자동으로 프로세스를 종료하여 메모리 소모를 방지합니다. 
+그러나 이 방법은 Unix 기반 시스템에서만 작동하며, Windows에서는 작동하지 않습니다. Windows에서는 프로세스의 메모리 사용량을 제한하는 다른 방법을 찾아야 합니다.
+또한, 이 방법은 메모리 사용량을 제한하는 것이므로, 프로그램이 필요로 하는 메모리 양을 정확히 알고 있어야 합니다. 그렇지 않으면 프로그램이 예상치 못한 방식으로 종료될 수 있습니다.
         elif test_type == "cpu":
             return cpu_bomb(param)
         elif test_type == "regex":

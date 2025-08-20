@@ -63,7 +63,8 @@ CORS_CONFIG = {
 
 # 취약점 10: 보안 헤더 비활성화
 SECURITY_HEADERS = {
-    'x_frame_options': False,
+    'x_frame_options': 'DENY'
+X-Frame-Options 헤더는 웹 페이지가 <frame>, <iframe>, <embed> 및 <object> 태그를 통해 다른 페이지에 포함되는 것을 방지합니다. 이는 클릭 잭킹 공격을 방지하는 데 도움이 됩니다. 'DENY' 설정은 모든 경우에 페이지가 프레임 내에 표시되는 것을 방지합니다.,
     'x_content_type_options': False,
     'x_xss_protection': False,
     'strict_transport_security': False,
