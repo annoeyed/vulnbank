@@ -99,11 +99,7 @@ def test_logic_bug_negative_balance(amount):
 def test_long_input_overflow(payload):
     try:
         res = app.admin_panel(payload)
-        MAX_PAYLOAD_LENGTH = 5000  # Define a constant for maximum payload length
-if len(str(res)) > MAX_PAYLOAD_LENGTH:
-    raise ValueError(f"Payload length exceeds maximum limit of {MAX_PAYLOAD_LENGTH} characters.")
-else:
-    print("Payload is within the acceptable limit.")
+        assert len(str(res)) < 5000, f"Possible overflow/DoS with payload length={len(payload)}"
     except Exception as e:
         pytest.fail(f"Crash on long input: {e}")
 
