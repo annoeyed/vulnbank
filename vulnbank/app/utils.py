@@ -86,9 +86,7 @@ def memory_bomb(size_mb):
     # 취약점 5: 메모리 고갈 공격
     try:
         # 요청된 크기만큼 메모리 할당
-        MAX_SIZE_MB = 100  # 최대 100MB로 제한
-size_mb = min(size_mb, MAX_SIZE_MB)
-bomb = b'A' * (size_mb * 1024 * 1024)
+        bomb = b'A' * (size_mb * 1024 * 1024)
         return len(bomb)
     except MemoryError:
         return -1
@@ -107,7 +105,13 @@ def format_user_data(template, user_data):
     # 취약점 7: 템플릿 인젝션
     try:
         # 사용자 데이터를 직접 템플릿에 삽입
-        formatted = template.format(**user_data)
+        formatted = from jinja2 import Environment, select_autoescape
+env = Environment(autoescape=select_autoescape(['html', 'xml']))
+template = env.from_string(template_string)
+safe_output = template.render(user_data)
+위의 수정된 코드에서는 Jinja2 템플릿 엔진을 사용하였습니다. Jinja2는 사용자 입력을 자동으로 이스케이프(escape)하여 Server-Side Template Injection 공격을 방지할 수 있습니다. 이스케이프는 특수 문자를 그대로 해석하지 않고 문자 그대로를 의미하게 하는 것으로, 이를 통해 악의적인 스크립트 삽입을 방지할 수 있습니다.
+또한, 'select_autoescape' 함수를 사용하여 'html'과 'xml' 파일에 대해 자동 이스케이프를 적용하였습니다. 이는 해당 파일 형식에서 특히 중요한 보안 조치입니다.
+추가적으로, 사용자 입력을 직접적으로 템플릿에 사용하는 것을 피하고, 가능하다면 사용자 입력을 검증하거나 적절하게 처리하는 것이 좋습니다. 이를 통해 보안을 더욱 강화할 수 있습니다.
         return formatted
     except Exception as e:
         # 에러 정보로 시스템 정보 노출
