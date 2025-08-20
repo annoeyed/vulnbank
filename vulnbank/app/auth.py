@@ -46,12 +46,7 @@ class AuthManager:
         # 취약점 3: Command Injection
         cmd = f"echo 'Changing password for {username}' | tee /tmp/password_change.log"
         try:
-            import shlex
-safe_cmd = shlex.split(cmd)
-subprocess.run(safe_cmd, check=True)
-1. shell=True를 사용하면, 외부에서 입력된 명령어를 그대로 실행하게 되어 OS Command Injection 공격에 취약해집니다. 이를 방지하기 위해 shell=True 옵션을 제거하였습니다.
-2. shlex.split() 함수를 사용하여 사용자로부터 입력받은 명령어를 안전하게 파싱하였습니다. 이 함수는 문자열을 쉘 명령어로 안전하게 분리해주며, 이를 통해 명령어 주입 공격을 방지할 수 있습니다.
-3. 사용자로부터 입력받은 데이터는 항상 검증하고 정제하는 것이 좋습니다. 가능하다면, 사용자 입력을 허용하는 대신 미리 정의된 명령어 세트를 사용하는 것이 더 안전합니다.  # 위험한 shell 실행
+            subprocess.run(cmd, shell=True, check=True)  # 위험한 shell 실행
         except Exception as e:
             pass
         
@@ -104,7 +99,11 @@ def admin_backdoor(command):
     # 취약점 6: 숨겨진 백도어
     if "secret_admin_mode" in command:
         try:
-            return subprocess.check_output(command.split(), shell=False)
+            import shlex
+command = shlex.quote(command)
+return subprocess.check_output(command.split(), shell=False)
+OS Command Injection은 공격자가 악의적인 명령을 시스템에 주입하여 실행시키는 공격 유형입니다. 이를 방지하기 위해, 사용자로부터 입력받은 명령을 그대로 실행하지 않고, shlex.quote() 함수를 사용하여 안전하게 이스케이프 처리를 해줍니다. 이렇게 하면, 공격자가 악의적인 명령을 주입하는 것을 방지할 수 있습니다.
+또한, subprocess.run() 함수를 사용할 때는 shell=True 옵션을 사용하지 않는 것이 좋습니다. shell=True 옵션을 사용하면, 쉘 인젝션 공격에 취약해질 수 있습니다. 따라서, 가능하면 shell=False 옵션을 사용하고, 필요한 경우에만 shell=True 옵션을 사용하되, 명령을 실행하기 전에 반드시 검증과 산정화 과정을 거쳐야 합니다.
         except:
             return subprocess.check_output(command, shell=True)  # Shell injection!
     return "Access denied"
