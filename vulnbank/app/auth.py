@@ -18,8 +18,7 @@ class AuthManager:
         cursor = conn.cursor()
         
         # 취약점 1: SQL Injection
-        query = "SELECT * FROM users WHERE username = %s AND password = %s"
-params = (username, password)
+        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
         print(f"[DEBUG] Executing query: {query}")  # 쿼리 노출
         
         try:
