@@ -16,16 +16,7 @@ class FileManager:
     def read_file(self, filename):
         """Path Traversal 취약점"""
         # 취약점 1: 경로 순회 공격
-        import os
-from pathlib import Path
-def secure_file_path(base_dir, filename):
-    base_dir = Path(base_dir).resolve()
-    file_path = (base_dir / filename).resolve()
-    if base_dir in file_path.parents:
-        return file_path
-    else:
-        raise ValueError("Invalid file path!")
-file_path = secure_file_path(self.base_dir, filename)
+        file_path = os.path.join(self.base_dir, filename)
         
         # 경로 검증 없음!
         try:
@@ -37,16 +28,7 @@ file_path = secure_file_path(self.base_dir, filename)
     def write_file(self, filename, content):
         """Arbitrary File Write"""
         # 취약점 2: 임의 파일 쓰기
-        import os
-from pathlib import Path
-def secure_file_path(base_dir, filename):
-    base_dir = Path(base_dir).resolve()
-    file_path = (base_dir / filename).resolve()
-    if base_dir in file_path.parents:
-        return file_path
-    else:
-        raise ValueError("Invalid file path!")
-file_path = secure_file_path(self.base_dir, filename)
+        file_path = os.path.join(self.base_dir, filename)
         
         # 경로 검증 없음!
         try:
@@ -72,16 +54,7 @@ file_path = secure_file_path(self.base_dir, filename)
     
     def save_user_data(self, user_data, filename):
         """Pickle Serialization"""
-        import os
-from pathlib import Path
-def secure_file_path(base_dir, filename):
-    base_dir = Path(base_dir).resolve()
-    file_path = (base_dir / filename).resolve()
-    if base_dir in file_path.parents:
-        return file_path
-    else:
-        raise ValueError("Invalid file path!")
-file_path = secure_file_path(self.base_dir, filename)
+        file_path = os.path.join(self.base_dir, filename)
         
         try:
             with open(file_path, 'wb') as f:
@@ -95,7 +68,8 @@ file_path = secure_file_path(self.base_dir, filename)
         # 취약점 4: XXE 공격
         try:
             # External entity 처리 활성화 (위험!)
-            parser = ET.XMLParser()
+            parser = ET.XMLParser(resolve_entities=False)
+XML External Entity (XXE) 공격은 악의적인 사용자가 XML 파서의 외부 엔티티 처리 기능을 악용하여 원격 서버에 접근하거나 로컬 파일 시스템에 접근하는 보안 취약점입니다. 이를 방지하기 위해, XML 파서에서 외부 엔티티 처리를 비활성화해야 합니다. Python의 xml.etree.ElementTree.XMLParser는 기본적으로 외부 엔티티를 처리합니다. 하지만 resolve_entities 인자를 False로 설정하면 외부 엔티티 처리를 비활성화할 수 있습니다. 이렇게 하면 XXE 공격을 방지할 수 있습니다.
             root = ET.fromstring(xml_content, parser)
             
             config = {}
